@@ -2,10 +2,10 @@ return {
   "olimorris/codecompanion.nvim",
   cmd = { "CodeCompanion", "CodeCompanionChat" },
   keys = { { "<leader>ai", "<cmd>CodeCompanionChat Toggle<CR>", desc = "[A][I]" } },
+  -- lazy = false,
   dependencies = {
     { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
     { "nvim-lua/plenary.nvim" },
-    -- Test with blink.cmp
     "ravitemer/mcphub.nvim",
     {
       "echasnovski/mini.diff",
@@ -73,12 +73,30 @@ return {
           },
         })
       end,
+      ollama = function()
+        return require("codecompanion.adapters").extend("ollama", {
+          schema = {
+            model = {
+              default = "custom-qwen3:0.6b",
+            },
+          },
+        })
+      end,
+      qwen = function()
+        return require("codecompanion.adapters").extend("ollama", {
+          name = "qwen", -- Give this adapter a different name to differentiate it from the default ollama adapter
+          schema = {
+            model = {
+              default = "custom-qwen3:0.6b",
+            },
+          },
+        })
+      end,
     },
     --Refer to: https://github.com/olimorris/codecompanion.nvim/blob/main/lua/codecompanion/config.lua
     strategies = {
-      --NOTE: Change the adapter as required
-      chat = { adapter = "llamacpp" },
-      inline = { adapter = "llamacpp" },
+      chat = { adapter = "ollama" },
+      inline = { adapter = "ollama" },
     },
     opts = {
       log_level = "DEBUG",
