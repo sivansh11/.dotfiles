@@ -18,4 +18,6 @@ vim.keymap.set("n", "<F9>", function()
   require("dap").toggle_breakpoint()
 end, { desc = "toggle_breakpoint" })
 
-vim.keymap.set("n", "<leader>t", Snacks.terminal.toggle, { desc = "toggle terminal" })
+vim.keymap.set({ "n", "t" }, "<C-[><C-[>", Snacks.terminal.toggle, { desc = "toggle terminal" })
+
+-- vim.keymap.set("n", "<leader>t", Snacks.terminal.toggle, { desc = "toggle terminal" })
