@@ -44,48 +44,36 @@ def generate_wofi_css_with_wal_colors(wal_colors_file_path="~/.cache/wal/colors"
 }}
 window {{
 margin: 0px;
-border: 1px solid {accent_color_1}; /* Using an accent color for the border */
-border-radius: 11px;
 background-color: {background_color};
 }}
 
 #input {{
 margin: 5px;
-border: none;
-border-radius: 11px;
 color: {foreground_color};
 background-color: {background_color};
 }}
 
 #inner-box {{
 margin: 5px;
-border: none;
-border-radius: 11px;
 background-color: {dim_background}; /* Slightly different background for inner box */
 }}
 
 #outer-box {{
 margin: 5px;
-border: none;
-border-radius: 11px;
 background-color: {dim_background}; /* Slightly different background for outer box */
 }}
 
 #scroll {{
 margin: 0px;
-border: none;
 border-radius: 11px;
 }}
 
 #text {{
 margin: 5px;
-border: none;
-border-radius: 11px;
 color: {foreground_color};
 }}
 
 #entry:selected {{
-border-radius: 11px;
 background: {accent_color_2}; /* Using an accent color for selected entry background */
 }}
 """
