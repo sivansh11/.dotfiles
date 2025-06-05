@@ -5,12 +5,13 @@
     "modules-left": [
         "hyprland/workspaces",
         "hyprland/mode",
-        "hyprland/scratchpad",
-        "custom/media"
+        "hyprland/scratchpad"
+        // "custom/media"
     ],
-    // "modules-center": [
-    //     "hyprland/window"
-    // ],
+    "modules-center": [
+        "custom/media"
+        // "hyprland/window"
+    ],
     "modules-right": [
         "idle_inhibitor",
         "pulseaudio",
@@ -18,8 +19,8 @@
         "power-profiles-daemon",
         "battery",
         "battery#bat2",
-        "clock",
-        "keyboard-state" // Moved keyboard-state to the right
+        "clock"
+        // "keyboard-state" // Moved keyboard-state to the right
     ],
     "keyboard-state": {
         "numlock": true,
@@ -87,7 +88,7 @@
             "critical": 15
         },
         "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
+        "format-charging": "{capacity}% 🔋",
         "format-plugged": "{capacity}% ",
         "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾"]
     },
@@ -115,7 +116,7 @@
     },
     "pulseaudio": {
         "format": "{volume}% {icon}",
-        "format-muted": "",
+        "format-muted": "🔇",
         "format-icons": {
             "headphone": "󰋋",
             "hands-free": "󰋎",
@@ -136,7 +137,8 @@
             "default": "🎜"
         },
         "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null"
+        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null",
+        "on-click": "playerctl play-pause" // Add this line
     },
     "custom/power": {
         "format" : "⏻ ",
