@@ -95,8 +95,8 @@ return {
     },
     --Refer to: https://github.com/olimorris/codecompanion.nvim/blob/main/lua/codecompanion/config.lua
     strategies = {
-      chat = { adapter = "ollama" },
-      inline = { adapter = "ollama" },
+      chat = { adapter = "gemini" },
+      inline = { adapter = "gemini" },
     },
     opts = {
       log_level = "DEBUG",
