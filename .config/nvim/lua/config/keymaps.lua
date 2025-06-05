@@ -24,6 +24,6 @@ vim.keymap.set("n", "<C-.>", function()
   require("dap").up()
 end, { desc = "up" })
 
-vim.keymap.set({ "n", "t" }, "<C-[><C-[>", Snacks.terminal.toggle, { desc = "toggle terminal" })
+-- vim.keymap.set({ "n", "t" }, "<C-[><C-[>", Snacks.terminal.toggle, { desc = "toggle terminal" })
 
 -- vim.keymap.set("n", "<leader>t", Snacks.terminal.toggle, { desc = "toggle terminal" })
