@@ -160,8 +160,11 @@ export MANPAGER='nvim +Man!'
 export PICO_SDK_PATH='/home/sivansh/pico-sdk/'
 export PATH="/home/sivansh/git/llama.cpp/build/bin:$PATH"
 export PATH=~/.npm-global/bin:$PATH
+export PATH=/home/sivansh/git/neovide/target/release:$PATH
 
-source /home/sivansh/vulkan/1.4.313.0/setup-env.sh
+source /home/sivansh/vulkan/1.3.296.0/setup-env.sh
+# export EMSDK_QUIET=1
+# source "/home/sivansh/git/emsdk/emsdk_env.sh"
 
 # PROMPT="%n@%M:%~
 # ζ "
