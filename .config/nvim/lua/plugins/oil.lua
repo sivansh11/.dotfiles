@@ -3,7 +3,14 @@ return {
   keys = {
     { "-", "<cmd>Oil --float<CR>", desc = "Oil file manager" },
   },
-  opts = {},
+  opts = {
+    keymaps = {
+      ["q"] = {
+        callback = "actions.close",
+        mode = "n", -- 'n' ensures this mapping only applies in Normal mode
+      },
+    },
+  },
   -- ---@module 'oil'
   -- ---@type oil.SetupOpts
   -- config = function()
