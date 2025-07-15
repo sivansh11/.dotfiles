@@ -5,3 +5,4 @@ vim.g.snacks_animate = false
 vim.g.lazyvim_picker = "fzf"
 vim.g.lazyvim_cmp = "blink.cmp"
 vim.g.ai_cmp = false
+vim.opt.foldmethod = "syntax"
