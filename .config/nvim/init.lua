@@ -10,6 +10,12 @@ vim.o.shiftwidth = 2
 vim.o.clipboard = 'unnamedplus'
 vim.o.confirm = true
 
+vim.diagnostic.config({
+  virtual_text = true,      -- Enable inline virtual text diagnostics
+  signs = true,             -- Enable signs in the gutter
+  update_in_insert = false, -- Disable updates in Insert mode for performance
+})
+
 -- plugins
 vim.pack.add({
   { src = 'https://github.com/NMAC427/guess-indent.nvim' },
@@ -25,8 +31,10 @@ vim.pack.add({
   { src = 'https://github.com/mason-org/mason.nvim' },
   { src = 'https://github.com/mason-org/mason-lspconfig.nvim' },
   { src = 'https://github.com/jay-babu/mason-nvim-dap.nvim' },
-  { src = 'https://github.com/igorlfs/nvim-dap-view' },
+  { src = 'https://github.com/igorlfs/nvim-dap-view', },
   { src = 'https://github.com/akinsho/toggleterm.nvim' },
+  { src = 'https://github.com/lewis6991/gitsigns.nvim' },
+  { src = 'https://github.com/mikesmithgh/kitty-scrollback.nvim' },
 })
 require('mason').setup()
 require("mason-nvim-dap").setup({
@@ -60,8 +68,24 @@ require('kanagawa').setup({
 require('fzf-lua').setup({
   fzf_colors = true,
 })
-require('dap-view').setup()
+require('dap-view').setup({
+  winbar = {
+    sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl", "console" },
+    base_sections = {
+      console = {
+        keymap = "C",
+        label = "Console [C]",
+        short_label = "󰆍 [C]",
+        action = function()
+          require("dap-view.term").show()
+        end,
+      },
+    }
+  }
+})
 require("toggleterm").setup()
+require('gitsigns').setup()
+require('kitty-scrollback').setup()
 
 -- auto open dap view on dap attach and close dap view on terminate
 require('dap').listeners.before.attach.dapui_config = function()
@@ -76,7 +100,6 @@ end
 require('dap').listeners.before.event_exited.dapui_config = function()
   vim.cmd("DapViewClose")
 end
-require('dap').defaults.fallback.switchbuf = 'useopen,usetab,uselast'
 
 -- colorscheme
 vim.cmd('colorscheme kanagawa')
@@ -92,7 +115,12 @@ vim.keymap.set('n', '<leader>ff', require('fzf-lua').files)
 vim.keymap.set('n', '<leader>sg', require('fzf-lua').live_grep)
 vim.keymap.set('n', '<leader>ss', require('fzf-lua').lsp_live_workspace_symbols)
 vim.keymap.set('n', '<leader>sd', require('fzf-lua').diagnostics_workspace)
+vim.keymap.set('n', 'grn', vim.lsp.buf.rename)
+vim.keymap.set('n', 'gra', vim.lsp.buf.code_action)
 vim.keymap.set('n', 'grr', require('fzf-lua').lsp_references)
+vim.keymap.set('n', 'gri', require('fzf-lua').lsp_implementations)
+vim.keymap.set('n', 'grd', require('fzf-lua').lsp_definitions)
+vim.keymap.set('n', 'grD', vim.lsp.buf.declaration)
 vim.keymap.set('n', '<leader><leader>', require('fzf-lua').buffers)
 vim.keymap.set('n', '-', '<cmd>Oil<CR>')
 vim.keymap.set('n', '<F5>', require('dap').continue)
@@ -102,7 +130,7 @@ vim.keymap.set('n', '<F23>', require('dap').step_out)
 vim.keymap.set('n', '<F9>', require('dap').toggle_breakpoint)
 vim.keymap.set('n', '<Right>', require('dap').down)
 vim.keymap.set('n', '<Left>', require('dap').up)
-vim.keymap.set('n', 'dt', function ()
+vim.keymap.set('n', 'dt', function()
   require('dap').terminate()
   vim.cmd('DapViewClose')
 end)
