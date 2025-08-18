@@ -25,12 +25,10 @@ vim.diagnostic.config({
 
 -- plugins
 vim.pack.add({
-  { src = 'https://github.com/NMAC427/guess-indent.nvim' },
   { src = 'https://github.com/rebelot/kanagawa.nvim' },
-  {
-    src = 'https://github.com/saghen/blink.cmp',
-    version = 'v1.6.0'
-  },
+  { src = 'https://github.com/akinsho/toggleterm.nvim' },
+  { src = 'https://github.com/lewis6991/gitsigns.nvim' },
+  { src = 'https://github.com/NMAC427/guess-indent.nvim' },
   { src = 'https://github.com/ibhagwan/fzf-lua', },
   { src = 'https://github.com/stevearc/oil.nvim' },
   { src = 'https://github.com/mfussenegger/nvim-dap' },
@@ -39,12 +37,18 @@ vim.pack.add({
   { src = 'https://github.com/mason-org/mason-lspconfig.nvim' },
   { src = 'https://github.com/jay-babu/mason-nvim-dap.nvim' },
   { src = 'https://github.com/igorlfs/nvim-dap-view', },
-  { src = 'https://github.com/akinsho/toggleterm.nvim' },
-  { src = 'https://github.com/lewis6991/gitsigns.nvim' },
   { src = 'https://github.com/mikesmithgh/kitty-scrollback.nvim' },
+  { src = 'https://github.com/folke/snacks.nvim' },
+  { src = 'https://github.com/NickvanDyke/opencode.nvim' },
+  { src = 'https://github.com/sindrets/diffview.nvim' },
   { src = 'https://github.com/aserowy/tmux.nvim' },
+  {
+    src = 'https://github.com/saghen/blink.cmp',
+    version = 'v1.6.0'
+  },
 })
 require("tmux").setup()
+require('kitty-scrollback').setup()
 require('mason').setup()
 require("mason-nvim-dap").setup({
   handlers = {}
@@ -94,7 +98,7 @@ require('dap-view').setup({
 })
 require("toggleterm").setup()
 require('gitsigns').setup()
-require('kitty-scrollback').setup()
+require('opencode').setup()
 
 -- auto open dap view on dap attach and close dap view on terminate
 require('dap').listeners.before.attach.dapui_config = function()
