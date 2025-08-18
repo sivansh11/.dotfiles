@@ -11,9 +11,16 @@ vim.o.clipboard = 'unnamedplus'
 vim.o.confirm = true
 
 vim.diagnostic.config({
-  virtual_text = true,      -- Enable inline virtual text diagnostics
-  signs = true,             -- Enable signs in the gutter
-  update_in_insert = false, -- Disable updates in Insert mode for performance
+  virtual_text = true,
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "", -- Nerd Font icon for error
+      [vim.diagnostic.severity.WARN] = "", -- Nerd Font icon for warning
+      [vim.diagnostic.severity.INFO] = "", -- Nerd Font icon for info
+      [vim.diagnostic.severity.HINT] = "󱜹", -- Nerd Font icon for hint
+    }
+  },
+  update_in_insert = false,
 })
 
 -- plugins
