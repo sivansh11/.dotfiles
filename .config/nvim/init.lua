@@ -35,7 +35,9 @@ vim.pack.add({
   { src = 'https://github.com/akinsho/toggleterm.nvim' },
   { src = 'https://github.com/lewis6991/gitsigns.nvim' },
   { src = 'https://github.com/mikesmithgh/kitty-scrollback.nvim' },
+  { src = 'https://github.com/aserowy/tmux.nvim' },
 })
+require("tmux").setup()
 require('mason').setup()
 require("mason-nvim-dap").setup({
   handlers = {}
@@ -105,10 +107,10 @@ end
 vim.cmd('colorscheme kanagawa')
 
 -- keymaps
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set('n', '<C-h>', require("tmux").move_left, { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-l>', require("tmux").move_right, { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<C-j>', require("tmux").move_bottom, { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<C-k>', require("tmux").move_top, { desc = 'Move focus to the upper window' })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', '<leader>cf', vim.lsp.buf.format)
 vim.keymap.set('n', '<leader>ff', require('fzf-lua').files)
@@ -135,3 +137,5 @@ vim.keymap.set('n', 'dt', function()
   vim.cmd('DapViewClose')
 end)
 vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm direction=float dir=.<CR>')
+--    [[<cmd>lua require("tmux").next_window()<cr>]],
+--    [[<cmd>lua require("tmux").previous_window()<cr>]],
