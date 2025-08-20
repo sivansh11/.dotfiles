@@ -1,3 +1,6 @@
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 vim.g.mapleader = ' '
 
 vim.o.nu = true
@@ -42,11 +45,13 @@ vim.pack.add({
   { src = 'https://github.com/NickvanDyke/opencode.nvim' },
   { src = 'https://github.com/sindrets/diffview.nvim' },
   { src = 'https://github.com/aserowy/tmux.nvim' },
+  { src = 'https://github.com/nvim-tree/nvim-tree.lua' },
   {
     src = 'https://github.com/saghen/blink.cmp',
     version = 'v1.6.0'
   },
 })
+require('nvim-tree').setup()
 require("tmux").setup()
 require('kitty-scrollback').setup()
 require('mason').setup()
@@ -128,12 +133,14 @@ vim.keymap.set('n', '<leader>ff', require('fzf-lua').files)
 vim.keymap.set('n', '<leader>sg', require('fzf-lua').live_grep)
 vim.keymap.set('n', '<leader>ss', require('fzf-lua').lsp_live_workspace_symbols)
 vim.keymap.set('n', '<leader>sd', require('fzf-lua').diagnostics_workspace)
-vim.keymap.set('n', 'grn', vim.lsp.buf.rename)
-vim.keymap.set('n', 'gra', vim.lsp.buf.code_action)
-vim.keymap.set('n', 'grr', require('fzf-lua').lsp_references)
-vim.keymap.set('n', 'gri', require('fzf-lua').lsp_implementations)
-vim.keymap.set('n', 'grd', require('fzf-lua').lsp_definitions)
-vim.keymap.set('n', 'grD', vim.lsp.buf.declaration)
+vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename)
+vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
+vim.keymap.set('n', 'gr', require('fzf-lua').lsp_references)
+vim.keymap.set('n', 'gI', require('fzf-lua').lsp_implementations)
+vim.keymap.set('n', 'gd', require('fzf-lua').lsp_definitions)
+vim.keymap.set('n', 'gD', vim.lsp.buf.declaration)
+vim.keymap.set('n', 'gK', vim.lsp.buf.signature_help)
+vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help)
 vim.keymap.set('n', '<leader><leader>', require('fzf-lua').buffers)
 vim.keymap.set('n', '-', '<cmd>Oil<CR>')
 vim.keymap.set('n', '<F5>', require('dap').continue)
@@ -148,5 +155,6 @@ vim.keymap.set('n', 'dt', function()
   vim.cmd('DapViewClose')
 end)
 vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm direction=float dir=.<CR>')
+vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>')
 --    [[<cmd>lua require("tmux").next_window()<cr>]],
 --    [[<cmd>lua require("tmux").previous_window()<cr>]],
