@@ -12,6 +12,10 @@ vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 vim.o.clipboard = 'unnamedplus'
 vim.o.confirm = true
+vim.o.wildmenu = true
+
+-- vim.wo.foldmethod = 'expr'
+-- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 
 vim.diagnostic.config({
   virtual_text = true,
@@ -28,7 +32,10 @@ vim.diagnostic.config({
 
 -- plugins
 vim.pack.add({
+  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
   { src = 'https://github.com/rebelot/kanagawa.nvim' },
+  { src = 'https://github.com/nvim-tree/nvim-web-devicons' },
+  { src = 'https://github.com/nvim-lualine/lualine.nvim' },
   { src = 'https://github.com/akinsho/toggleterm.nvim' },
   { src = 'https://github.com/lewis6991/gitsigns.nvim' },
   { src = 'https://github.com/NMAC427/guess-indent.nvim' },
@@ -38,6 +45,7 @@ vim.pack.add({
   { src = 'https://github.com/neovim/nvim-lspconfig' },
   { src = 'https://github.com/mason-org/mason.nvim' },
   { src = 'https://github.com/mason-org/mason-lspconfig.nvim' },
+  { src = 'https://github.com/linrongbin16/lsp-progress.nvim' },
   { src = 'https://github.com/jay-babu/mason-nvim-dap.nvim' },
   { src = 'https://github.com/igorlfs/nvim-dap-view', },
   { src = 'https://github.com/mikesmithgh/kitty-scrollback.nvim' },
@@ -46,9 +54,40 @@ vim.pack.add({
   { src = 'https://github.com/sindrets/diffview.nvim' },
   { src = 'https://github.com/aserowy/tmux.nvim' },
   { src = 'https://github.com/nvim-tree/nvim-tree.lua' },
+  { src = 'https://github.com/MunifTanjim/nui.nvim' },
+  { src = 'https://github.com/folke/noice.nvim' },
+  { src = 'https://github.com/archibate/lualine-time' },
   {
     src = 'https://github.com/saghen/blink.cmp',
     version = 'v1.6.0'
+  },
+})
+require('nvim-treesitter.configs').setup({
+  ensure_installed = { "c", "cpp", "lua", "vimdoc", "markdown", "markdown_inline" },
+  sync_install = false,
+  auto_install = true,
+  indent = {
+    enable = true
+  },
+  highlight = {
+    enable = true,
+    disable = function(lang, buf)
+      local max_filesize = 100 * 1024   -- 100 KB
+      local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+      if ok and stats and stats.size > max_filesize then
+        return true
+      end
+    end,
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+})
+require('noice').setup({
+  presets = {
+    command_palette = true,
   },
 })
 require('nvim-tree').setup()
@@ -59,8 +98,16 @@ require("mason-nvim-dap").setup({
   handlers = {}
 })
 require('mason-lspconfig').setup()
--- add q to quite oil
+require('lsp-progress').setup()
+require('lualine').setup({
+  sections = {
+    lualine_z = {
+      'ctime',
+    }
+  }
+})
 require('oil').setup({
+  -- add q to quite oil
   keymaps = {
     ['q'] = {
       callback = 'actions.close',
