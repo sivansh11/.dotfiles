@@ -13,6 +13,20 @@ vim.o.shiftwidth = 2
 vim.o.clipboard = 'unnamedplus'
 vim.o.confirm = true
 vim.o.wildmenu = true
+vim.o.scrolloff = 10
+
+if vim.g.neovide then
+  vim.g.neovide_scale_factor = 0.87
+  vim.keymap.set({ "n", "v" }, "<C-=>", function()
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1
+  end)
+  vim.keymap.set({ "n", "v" }, "<C-->", function()
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1
+  end)
+  vim.keymap.set({ "n", "v" }, "<C-0>", function()
+    vim.g.neovide_scale_factor = 1.0
+  end)
+end
 
 -- vim.wo.foldmethod = 'expr'
 -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
@@ -34,6 +48,7 @@ vim.diagnostic.config({
 vim.pack.add({
   { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
   { src = 'https://github.com/rebelot/kanagawa.nvim' },
+  { src = 'https://github.com/vague2k/vague.nvim' },
   { src = 'https://github.com/nvim-tree/nvim-web-devicons' },
   { src = 'https://github.com/nvim-lualine/lualine.nvim' },
   { src = 'https://github.com/akinsho/toggleterm.nvim' },
@@ -50,13 +65,12 @@ vim.pack.add({
   { src = 'https://github.com/igorlfs/nvim-dap-view', },
   { src = 'https://github.com/mikesmithgh/kitty-scrollback.nvim' },
   { src = 'https://github.com/folke/snacks.nvim' },
-  { src = 'https://github.com/NickvanDyke/opencode.nvim' },
   { src = 'https://github.com/sindrets/diffview.nvim' },
   { src = 'https://github.com/aserowy/tmux.nvim' },
   { src = 'https://github.com/nvim-tree/nvim-tree.lua' },
   { src = 'https://github.com/MunifTanjim/nui.nvim' },
-  { src = 'https://github.com/folke/noice.nvim' },
   { src = 'https://github.com/archibate/lualine-time' },
+  { src = 'https://github.com/vyfor/cord.nvim' },
   {
     src = 'https://github.com/saghen/blink.cmp',
     version = 'v1.6.0'
@@ -72,7 +86,7 @@ require('nvim-treesitter.configs').setup({
   highlight = {
     enable = true,
     disable = function(lang, buf)
-      local max_filesize = 100 * 1024   -- 100 KB
+      local max_filesize = 100 * 1024 -- 100 KB
       local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
       if ok and stats and stats.size > max_filesize then
         return true
@@ -85,14 +99,13 @@ require('nvim-treesitter.configs').setup({
     additional_vim_regex_highlighting = false,
   },
 })
-require('noice').setup({
-  presets = {
-    command_palette = true,
-  },
-})
 require('nvim-tree').setup()
 require("tmux").setup()
-require('kitty-scrollback').setup()
+require('kitty-scrollback').setup({
+  paste_window = {
+    yank_register_enabled = false
+  }
+})
 require('mason').setup()
 require("mason-nvim-dap").setup({
   handlers = {}
@@ -119,6 +132,7 @@ require('blink.cmp').setup({
   keymap = { preset = 'enter' }
 })
 -- kanagawa fix goofy background
+require('vague').setup({})
 require('kanagawa').setup({
   colors = {
     theme = {
@@ -136,22 +150,10 @@ require('fzf-lua').setup({
 require('dap-view').setup({
   winbar = {
     sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl", "console" },
-    base_sections = {
-      console = {
-        keymap = "C",
-        label = "Console [C]",
-        short_label = "󰆍 [C]",
-        action = function()
-          require("dap-view.term").show()
-        end,
-      },
-    }
   }
 })
-require("toggleterm").setup()
+require('toggleterm').setup()
 require('gitsigns').setup()
-require('opencode').setup()
-
 -- auto open dap view on dap attach and close dap view on terminate
 require('dap').listeners.before.attach.dapui_config = function()
   vim.cmd("DapViewOpen")
@@ -166,8 +168,25 @@ require('dap').listeners.before.event_exited.dapui_config = function()
   vim.cmd("DapViewClose")
 end
 
+vim.fn.sign_define('DapBreakpoint', {
+  text = '',
+  texthl = 'DapBreakpoint',
+  linehl = '',
+  numhl = ''
+})
+
+vim.api.nvim_create_autocmd('PackChanged', {
+  callback = function(opts)
+    if opts.data.spec.name == 'cord.nvim' and opts.data.kind == 'update' then
+      vim.cmd 'Cord update'
+    end
+  end
+})
+
+vim.lsp.enable('slangd')
+
 -- colorscheme
-vim.cmd('colorscheme kanagawa')
+vim.cmd('colorscheme vague')
 
 -- keymaps
 vim.keymap.set('n', '<C-h>', require("tmux").move_left, { desc = 'Move focus to the left window' })
@@ -181,7 +200,8 @@ vim.keymap.set('n', '<leader>sg', require('fzf-lua').live_grep)
 vim.keymap.set('n', '<leader>ss', require('fzf-lua').lsp_live_workspace_symbols)
 vim.keymap.set('n', '<leader>sd', require('fzf-lua').diagnostics_workspace)
 vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename)
-vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
+-- vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
+vim.keymap.set('n', '<leader>ca', require('fzf-lua').lsp_code_actions)
 vim.keymap.set('n', 'gr', require('fzf-lua').lsp_references)
 vim.keymap.set('n', 'gI', require('fzf-lua').lsp_implementations)
 vim.keymap.set('n', 'gd', require('fzf-lua').lsp_definitions)
