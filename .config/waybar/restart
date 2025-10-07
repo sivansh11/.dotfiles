@@ -1,6 +1,0 @@
-#!/bin/bash
-
-killall waybar
-killall cava
-~/.config/waybar/style.py
-waybar

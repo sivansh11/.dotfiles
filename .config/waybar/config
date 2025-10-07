@@ -1,25 +1,59 @@
 [
   {
       "height": 30,
-      "spacing": 6,
+      "spacing": 0,
       "modules-left": [
-          "hyprland/workspaces"
+          "custom/left-start",
+          "hyprland/workspaces",
+          "custom/left-end"
       ],
       "modules-center": [
-          "custom/media"
-          // "hyprland/window"
+          "custom/center-start",
+          "custom/media",
+          "custom/separator",
+          "custom/cava",
+          "custom/center-end"
       ],
       "modules-right": [
-          "custom/cava",
+          "custom/right-start",
           "idle_inhibitor",
+          "custom/separator",
+          "memory",
+          "custom/separator",
+          "cpu",
+          "custom/separator",
           "pulseaudio",
+          "custom/separator",
           "network",
+          "custom/separator",
           "power-profiles-daemon",
+          "custom/separator",
           "battery",
-          "battery#bat2",
-          "clock"
-          // "keyboard-state" // Moved keyboard-state to the right
+          "custom/separator",
+          "clock",
+          "custom/right-end"
       ],
+      "custom/left-start": {
+          "format": "["
+      },
+      "custom/left-end": {
+          "format": "]"
+      },
+      "custom/center-start": {
+          "format": "["
+      },
+      "custom/center-end": {
+          "format": "]"
+      },
+      "custom/right-start": {
+          "format": "["
+      },
+      "custom/right-end": {
+          "format": "]"
+      },
+      "custom/separator": {
+          "format": "/"
+      },
       "keyboard-state": {
           "numlock": true,
           "capslock": true,
@@ -45,10 +79,12 @@
       },
       "cpu": {
           "format": "{usage}% ",
-          "tooltip": false
+          "tooltip": false,
+          "interval": 1
       },
       "memory": {
-          "format": "{}% "
+          "format": "{}% ",
+          "interval": 1
       },
       "temperature": {
           "critical-threshold": 80,
@@ -68,10 +104,6 @@
           "format-charging": "{capacity}% 🔋",
           "format-plugged": "{capacity}% ",
           "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾"]
-      },
-      "battery#bat2": {
-          "bat": "BAT2",
-          "format": "{capacity}% 󰁹" // Simpler icon for the second battery
       },
       "power-profiles-daemon": {
           "format": "{icon}",
@@ -105,42 +137,33 @@
           },
           "on-click": "pavucontrol"
       },
-      // "custom/media": {
-      //     "format": "{icon} {text}",
-      //     "return-type": "json",
-      //     "max-length": 40,
-      //     "format-icons": {
-      //         "spotify": "",
-      //         "default": "🎜"
-      //     },
-      //     "escape": true,
-      //     "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null",
-      //     "on-click": "playerctl play-pause" // Add this line
-      // },
       "custom/media": {
-        "format": "&lt; {} &gt;",
-        "exec": "~/.config/waybar/waybar-cava/playerinfo.sh",
-        "escape": true,
-        "return-type": "json",
-        "interval": 2,
-        "tooltip": true,
-        "on-click": "playerctl play-pause",
+          "format": "{icon} {text}",
+          "return-type": "json",
+          "max-length": 40,
+          "format-icons": {
+              "spotify": "",
+              "default": "🎜"
+          },
+          "escape": true,
+          "exec": "$HOME/.config/waybar/scripts/mediaplayer.py 2> /dev/null",
+          "on-click": "playerctl play-pause"
       },
       "custom/cava": {
           "format": "{}",
-          "exec": "~/.config/waybar/cava.sh"
+          "exec": "~/.config/waybar/scripts/cava.sh"
       },
       "custom/power": {
           "format" : "⏻ ",
           "tooltip": false,
           "menu": "on-click",
           "menu-file": "$HOME/.config/waybar/power_menu.xml",
-          "menu-actions": { // Consider moving these actions to power_menu.xml or a script
+          "menu-actions": { 
               "shutdown": "shutdown",
               "reboot": "reboot",
               "suspend": "systemctl suspend",
               "hibernate": "systemctl hibernate"
           }
       }
-  },
+  }
 ]

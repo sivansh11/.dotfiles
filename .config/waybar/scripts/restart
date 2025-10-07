@@ -1,0 +1,6 @@
+#!/bin/bash
+
+killall waybar
+killall cava
+~/.config/waybar/scripts/style.py
+waybar & disown

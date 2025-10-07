@@ -18,7 +18,7 @@ def generate_waybar_css(colors_file, output_css_file):
         color4 = colors['color4']
         color5 = colors['color5']
         color6 = colors['color6']
-        color7 = colors['color6']
+        color7 = colors['color7']
         color8 = colors['color8']
 
         #  Use RGBA for background to set transparency.
