@@ -11,11 +11,14 @@ def generate_waybar_css(colors_file, output_css_file):
         background = colors['color0']
         foreground = colors['color7']
         accent = colors['color3']
+        color0 = colors['color0']
         color1 = colors['color1']
         color2 = colors['color2']
+        color3 = colors['color2']
         color4 = colors['color4']
         color5 = colors['color5']
         color6 = colors['color6']
+        color7 = colors['color6']
         color8 = colors['color8']
 
         #  Use RGBA for background to set transparency.
@@ -23,7 +26,7 @@ def generate_waybar_css(colors_file, output_css_file):
         r = int(background[1:3], 16)
         g = int(background[3:5], 16)
         b = int(background[5:7], 16)
-        alpha = 0.6  # Adjust this value for desired transparency (0.0 to 1.0)
+        alpha = 0.4  # Adjust this value for desired transparency (0.0 to 1.0)
         background_rgba = f"rgba({r}, {g}, {b}, {alpha})"
 
         css_content = f"""
@@ -31,6 +34,12 @@ def generate_waybar_css(colors_file, output_css_file):
 window#waybar {{
     background-color: {background_rgba};
     color: {foreground};
+    font-family: "monospace", "Font Awesome 6 Free";
+    font-size: 12px;
+}}
+
+#custom-cava {{
+    color: {color2};
     font-family: "monospace", "Font Awesome 6 Free";
     font-size: 12px;
 }}
@@ -44,7 +53,7 @@ window#waybar {{
 #workspaces button {{
     padding: 0 5px;
     background-color: transparent;
-    color: {color8};
+    color: {accent};
     border: none;
     border-radius: 5px;
 }}
