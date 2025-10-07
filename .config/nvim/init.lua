@@ -1,7 +1,6 @@
+vim.g.mapleader = ' '
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-
-vim.g.mapleader = ' '
 
 vim.o.nu = true
 vim.o.rnu = true
@@ -14,19 +13,6 @@ vim.o.clipboard = 'unnamedplus'
 vim.o.confirm = true
 vim.o.wildmenu = true
 vim.o.scrolloff = 10
-
-if vim.g.neovide then
-  vim.g.neovide_scale_factor = 0.87
-  vim.keymap.set({ "n", "v" }, "<C-=>", function()
-    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1
-  end)
-  vim.keymap.set({ "n", "v" }, "<C-->", function()
-    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1
-  end)
-  vim.keymap.set({ "n", "v" }, "<C-0>", function()
-    vim.g.neovide_scale_factor = 1.0
-  end)
-end
 
 -- vim.wo.foldmethod = 'expr'
 -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
@@ -46,8 +32,10 @@ vim.diagnostic.config({
 
 -- plugins
 vim.pack.add({
+  { src = 'https://github.com/nvim-mini/mini.icons' },
   { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
   { src = 'https://github.com/rebelot/kanagawa.nvim' },
+  { src = 'https://github.com/ellisonleao/gruvbox.nvim' },
   { src = 'https://github.com/vague2k/vague.nvim' },
   { src = 'https://github.com/nvim-tree/nvim-web-devicons' },
   { src = 'https://github.com/nvim-lualine/lualine.nvim' },
@@ -56,6 +44,7 @@ vim.pack.add({
   { src = 'https://github.com/NMAC427/guess-indent.nvim' },
   { src = 'https://github.com/ibhagwan/fzf-lua', },
   { src = 'https://github.com/stevearc/oil.nvim' },
+  { src = 'https://github.com/A7Lavinraj/fyler.nvim' },
   { src = 'https://github.com/mfussenegger/nvim-dap' },
   { src = 'https://github.com/neovim/nvim-lspconfig' },
   { src = 'https://github.com/mason-org/mason.nvim' },
@@ -71,6 +60,8 @@ vim.pack.add({
   { src = 'https://github.com/MunifTanjim/nui.nvim' },
   { src = 'https://github.com/archibate/lualine-time' },
   { src = 'https://github.com/vyfor/cord.nvim' },
+  { src = 'https://github.com/folke/noice.nvim' },
+  { src = 'https://github.com/j-hui/fidget.nvim' },
   {
     src = 'https://github.com/saghen/blink.cmp',
     version = 'v1.6.0'
@@ -128,8 +119,15 @@ require('oil').setup({
     }
   }
 })
+require('fyler').setup()
 require('blink.cmp').setup({
   keymap = { preset = 'enter' }
+})
+require('gruvbox').setup({
+  transparent_mode = true,
+  overrides = {
+    SignColumn = { link = "Normal" }
+  }
 })
 -- kanagawa fix goofy background
 require('vague').setup({})
@@ -144,8 +142,29 @@ require('kanagawa').setup({
     },
   }
 })
+require('noice').setup({
+  messages = {
+    enabled = false,
+  },
+  popupmenu = {
+    enabled = false,
+  },
+  presets = {
+    command_palette = true,
+  }
+})
+require('fidget').setup({
+  notification = {
+    override_vim_notify = true,
+  },
+})
 require('fzf-lua').setup({
   fzf_colors = true,
+  -- actions = {
+  --   files = {
+  --     true,
+  --   }
+  -- },
 })
 require('dap-view').setup({
   winbar = {
@@ -186,7 +205,8 @@ vim.api.nvim_create_autocmd('PackChanged', {
 vim.lsp.enable('slangd')
 
 -- colorscheme
-vim.cmd('colorscheme vague')
+vim.o.background = 'dark'
+vim.o.cmdheight = 0
 
 -- keymaps
 vim.keymap.set('n', '<C-h>', require("tmux").move_left, { desc = 'Move focus to the left window' })
@@ -223,5 +243,21 @@ vim.keymap.set('n', 'dt', function()
 end)
 vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm direction=float dir=.<CR>')
 vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>')
+
+if vim.g.neovide then
+  vim.g.neovide_scale_factor = 0.87
+  vim.keymap.set({ "n", "v" }, "<C-=>", function()
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1
+  end)
+  vim.keymap.set({ "n", "v" }, "<C-->", function()
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1
+  end)
+  vim.keymap.set({ "n", "v" }, "<C-0>", function()
+    vim.g.neovide_scale_factor = 1.0
+  end)
+  vim.cmd('colorscheme kanagawa')
+else
+  vim.cmd('colorscheme gruvbox')
+end
 --    [[<cmd>lua require("tmux").next_window()<cr>]],
 --    [[<cmd>lua require("tmux").previous_window()<cr>]],
