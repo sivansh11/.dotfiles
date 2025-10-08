@@ -51,7 +51,6 @@ window#waybar {{
 }}
 
 #workspaces button {{
-    padding: 0 5px;
     background-color: transparent;
     color: {accent};
     border: none;
