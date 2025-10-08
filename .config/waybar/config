@@ -9,8 +9,7 @@
       ],
       "modules-center": [
           "custom/center-start",
-          "custom/media",
-          "custom/separator",
+          "custom/media", // no separator since the media format has a space at the end
           "custom/cava",
           "custom/center-end"
       ],
@@ -52,7 +51,10 @@
           "format": "]"
       },
       "custom/separator": {
-          "format": "/"
+          "format": " "
+      },
+      "hyprland/workspaces": {
+          "format": "{name}",
       },
       "keyboard-state": {
           "numlock": true,
@@ -63,6 +65,7 @@
               "unlocked": ""
           }
       },
+
       "idle_inhibitor": {
           "format": "{icon}",
           "format-icons": {
@@ -138,7 +141,7 @@
           "on-click": "pavucontrol"
       },
       "custom/media": {
-          "format": "{icon} {text}",
+          "format": "{icon} {text} ",
           "return-type": "json",
           "max-length": 40,
           "format-icons": {
