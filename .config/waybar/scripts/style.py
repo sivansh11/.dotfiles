@@ -14,7 +14,7 @@ def generate_waybar_css(colors_file, output_css_file):
         color0 = colors['color0']
         color1 = colors['color1']
         color2 = colors['color2']
-        color3 = colors['color2']
+        color3 = colors['color3']
         color4 = colors['color4']
         color5 = colors['color5']
         color6 = colors['color6']
@@ -39,7 +39,7 @@ window#waybar {{
 }}
 
 #custom-cava {{
-    color: {color2};
+    color: {foreground};
     font-family: "monospace", "Font Awesome 6 Free";
     font-size: 12px;
 }}
@@ -96,7 +96,7 @@ window#waybar {{
 #clock {{
     padding: 0 10px;
     background-color: transparent;
-    color: {color5};
+    color: {foreground};
 }}
 
 /* CPU */
@@ -110,7 +110,7 @@ window#waybar {{
 #memory {{
     padding: 0 10px;
     background-color: transparent;
-    color: {color6};
+    color: {foreground};
 }}
 
 /* Temperature */
@@ -135,7 +135,7 @@ window#waybar {{
 #network {{
     padding: 0 10px;
     background-color: transparent;
-    color: {color2};
+    color: {foreground};
 }}
 
 #network.disconnected {{
@@ -170,56 +170,56 @@ window#waybar {{
 #custom-media {{
     padding: 0 10px;
     background-color: transparent;
-    color: {accent};
+    color: {foreground};
 }}
 
 /* Custom Power */
 #custom-power {{
     padding: 0 10px;
     background-color: transparent;
-    color: {color1};
+    color: {foreground};
 }}
 
 /* Idle Inhibitor */
 #idle_inhibitor {{
     padding: 0 10px;
     background-color: transparent;
-    color: {color4};
+    color: {foreground};
 }}
 
 /* Keyboard State */
 #keyboard-state {{
     padding: 0 10px;
     background-color: transparent;
-    color: {color5};
+    color: {foreground};
 }}
 
 /* Hyprland Mode */
 #hyprland-mode {{
     padding: 0 10px;
     background-color: transparent;
-    color: {accent};
+    color: {foreground};
 }}
 
 /* Hyprland Language */
 #hyprland-language {{
     padding: 0 10px;
     background-color: transparent;
-    color: {color6};
+    color: {foreground};
 }}
 
 /* Hyprland Scratchpad */
 #hyprland-scratchpad {{
     padding: 0 10px;
     background-color: transparent;
-    color: {color2};
+    color: {foreground};
 }}
 
 /* Power Profiles Daemon */
 #power-profiles-daemon {{
     padding: 0 10px;
     background-color: transparent;
-    color: {color5};
+    color: {foreground};
 }}
 """
 
