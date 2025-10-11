@@ -1,6 +1,6 @@
 [
   {
-      "height": 30,
+      "height": 40,
       "width": 1536,
       "spacing": 0,
       "modules-left": [
@@ -10,13 +10,13 @@
           "custom/end"
       ],
       "modules-center": [
-          "custom/start",
-          "custom/media", // no separator since the media format has a space at the end
-          "custom/cava",
-          "custom/end"
+          // "custom/start",
+          "custom/media" // no start and end because its included in media's format
+          // "custom/end"
       ],
       "modules-right": [
           "custom/start",
+          "custom/cava",
           "idle_inhibitor",
           "custom/separator",
           "memory",
@@ -132,7 +132,7 @@
           "on-click": "pavucontrol"
       },
       "custom/media": {
-          "format": "{icon} {text} ",
+          "format": "{icon} {text}",
           "return-type": "json",
           "max-length": 40,
           "format-icons": {
