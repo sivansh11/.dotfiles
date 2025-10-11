@@ -62,6 +62,8 @@ vim.pack.add({
   { src = 'https://github.com/vyfor/cord.nvim' },
   { src = 'https://github.com/folke/noice.nvim' },
   { src = 'https://github.com/j-hui/fidget.nvim' },
+  { src = 'https://github.com/uZer/pywal16.nvim' },
+  { src = 'https://github.com/mbbill/undotree' },
   {
     src = 'https://github.com/saghen/blink.cmp',
     version = 'v1.6.0'
@@ -204,7 +206,6 @@ vim.api.nvim_create_autocmd('PackChanged', {
 
 vim.lsp.enable('slangd')
 
--- colorscheme
 vim.o.background = 'dark'
 vim.o.cmdheight = 0
 
@@ -257,7 +258,7 @@ if vim.g.neovide then
   end)
   vim.cmd('colorscheme kanagawa')
 else
-  vim.cmd('colorscheme gruvbox')
+  vim.cmd('colorscheme pywal16')
 end
 --    [[<cmd>lua require("tmux").next_window()<cr>]],
 --    [[<cmd>lua require("tmux").previous_window()<cr>]],
