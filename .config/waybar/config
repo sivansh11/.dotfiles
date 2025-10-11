@@ -1,20 +1,22 @@
 [
   {
       "height": 30,
+      "width": 1536,
       "spacing": 0,
       "modules-left": [
-          "custom/left-start",
+          "custom/separator",
+          "custom/start",
           "hyprland/workspaces",
-          "custom/left-end"
+          "custom/end"
       ],
       "modules-center": [
-          "custom/center-start",
+          "custom/start",
           "custom/media", // no separator since the media format has a space at the end
           "custom/cava",
-          "custom/center-end"
+          "custom/end"
       ],
       "modules-right": [
-          "custom/right-start",
+          "custom/start",
           "idle_inhibitor",
           "custom/separator",
           "memory",
@@ -30,24 +32,13 @@
           "battery",
           "custom/separator",
           "clock",
-          "custom/right-end"
+          "custom/end",
+          "custom/separator"
       ],
-      "custom/left-start": {
+      "custom/start": {
           "format": "["
       },
-      "custom/left-end": {
-          "format": "]"
-      },
-      "custom/center-start": {
-          "format": "["
-      },
-      "custom/center-end": {
-          "format": "]"
-      },
-      "custom/right-start": {
-          "format": "["
-      },
-      "custom/right-end": {
+      "custom/end": {
           "format": "]"
       },
       "custom/separator": {
