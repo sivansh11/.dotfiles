@@ -1,5 +1,6 @@
 window#waybar {{
-	background-color: rgba({background.red}, {background.green}, {background.blue}, 0.55);
+	background-color: {background};
+  opacity: 0.85;
   color: {foreground};
   font-family: "monospace", "Font Awesome 6 Free";
   font-size: 12px;
@@ -30,10 +31,8 @@ window#waybar {{
 
 #window {{
     padding: 0 15px;
-    background-color: transparent;
 }}
 
-/* Battery */
 #battery {{
     padding: 0 10px;
     background-color: transparent;
@@ -90,7 +89,6 @@ window#waybar {{
     color: {color1};
 }}
 
-/* Pulseaudio */
 #pulseaudio {{
     padding: 0 10px;
     background-color: transparent;
