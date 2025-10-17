@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ "$#" -lt 1 ]; then
+  echo "update_theme [image path]"
+  exit 1
+fi
+
+wal -n -i "$1"
+swww img --transition-type=any $(cat ~/.cache/wal/wal)
+

@@ -1,0 +1,162 @@
+window#waybar {{
+	background-color: rgba({background.red}, {background.green}, {background.blue}, 0.55);
+  color: {foreground};
+  font-family: "monospace", "Font Awesome 6 Free";
+  font-size: 12px;
+  border-radius: 10px;
+  border: 2px solid {color3};
+}}
+
+#workspaces {{
+    padding: 0 10px;
+    background-color: transparent;
+}}
+
+#workspaces button {{
+    background-color: transparent;
+    color: {color3};
+    border: none;
+    border-radius: 5px;
+}}
+
+#workspaces button.active {{
+    color: {foreground};
+    background-color: {color3};
+}}
+
+#workspaces button.urgent {{
+    color: {color1};
+}}
+
+#window {{
+    padding: 0 15px;
+    background-color: transparent;
+}}
+
+/* Battery */
+#battery {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#battery.charging {{
+    color: {color2};
+}}
+
+#battery.warning:not(.charging) {{
+    color: {color4};
+}}
+
+#battery.critical:not(.charging) {{
+    color: {color1};
+}}
+
+#clock {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#cpu {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#memory {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#temperature {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#temperature.critical {{
+    color: {color1};
+}}
+
+#network {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#network.disconnected {{
+    color: {color1};
+}}
+
+/* Pulseaudio */
+#pulseaudio {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#pulseaudio.muted {{
+    color: {color4};
+}}
+
+#tray {{
+    padding: 0 5px;
+}}
+
+#tray > .passive {{
+    color: {color3};
+}}
+
+#tray > .needs-attention {{
+    color: {color1};
+}}
+
+#custom-media {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#custom-power {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#idle_inhibitor {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#keyboard-state {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#hyprland-mode {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#hyprland-language {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#hyprland-scratchpad {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
+
+#power-profiles-daemon {{
+    padding: 0 10px;
+    background-color: transparent;
+    color: {color3};
+}}
