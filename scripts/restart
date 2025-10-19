@@ -3,3 +3,4 @@
 wal -n -i $(cat ~/.cache/wal/wal) > /dev/null 2>&1
 killall waybar
 waybar -s ~/.cache/wal/style.css > /dev/null 2>&1 & disown
+dunstctl reload
