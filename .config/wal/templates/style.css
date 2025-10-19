@@ -1,6 +1,5 @@
 window#waybar {{
-	background-color: {background};
-  opacity: 0.85;
+	background-color: rgba({background.red}, {background.green}, {background.blue}, 0.75);
   color: {foreground};
   font-family: "monospace", "Font Awesome 6 Free";
   font-size: 12px;
