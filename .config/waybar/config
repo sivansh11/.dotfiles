@@ -13,11 +13,11 @@
 			"hyprland/workspaces"
 		],
 		"modules-right": [
+			"power-profiles-daemon",
 			"network",
 			"memory",
 			"cpu",
 			"temperature",
-			"power-profiles-daemon",
 			"clock",
 			"battery"
 		],
