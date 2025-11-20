@@ -32,6 +32,9 @@ vim.diagnostic.config({
 
 -- plugins
 vim.pack.add({
+  { src = 'https://github.com/folke/lazydev.nvim' },
+  { src = 'https://github.com/folke/which-key.nvim' },
+  { src = 'https://github.com/rcarriga/nvim-notify' },
   { src = 'https://github.com/nvim-mini/mini.icons' },
   { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
   { src = 'https://github.com/rebelot/kanagawa.nvim' },
@@ -42,7 +45,7 @@ vim.pack.add({
   { src = 'https://github.com/akinsho/toggleterm.nvim' },
   { src = 'https://github.com/lewis6991/gitsigns.nvim' },
   { src = 'https://github.com/NMAC427/guess-indent.nvim' },
-  { src = 'https://github.com/ibhagwan/fzf-lua', },
+  { src = 'https://github.com/ibhagwan/fzf-lua' },
   { src = 'https://github.com/stevearc/oil.nvim' },
   { src = 'https://github.com/A7Lavinraj/fyler.nvim' },
   { src = 'https://github.com/mfussenegger/nvim-dap' },
@@ -54,7 +57,9 @@ vim.pack.add({
   { src = 'https://github.com/igorlfs/nvim-dap-view', },
   { src = 'https://github.com/mikesmithgh/kitty-scrollback.nvim' },
   { src = 'https://github.com/folke/snacks.nvim' },
+  { src = 'https://github.com/sivansh11/jj.nvim' },
   { src = 'https://github.com/sindrets/diffview.nvim' },
+  { src = 'https://github.com/julienvincent/hunk.nvim' },
   { src = 'https://github.com/aserowy/tmux.nvim' },
   { src = 'https://github.com/nvim-tree/nvim-tree.lua' },
   { src = 'https://github.com/MunifTanjim/nui.nvim' },
@@ -63,12 +68,13 @@ vim.pack.add({
   { src = 'https://github.com/folke/noice.nvim' },
   { src = 'https://github.com/j-hui/fidget.nvim' },
   { src = 'https://github.com/uZer/pywal16.nvim' },
-  { src = 'https://github.com/mbbill/undotree' },
+  { src = 'https://github.com/XXiaoA/atone.nvim' },
   {
     src = 'https://github.com/saghen/blink.cmp',
     version = 'v1.6.0'
   },
 })
+require('lazydev').setup()
 require('nvim-treesitter.configs').setup({
   ensure_installed = { "c", "cpp", "lua", "vimdoc", "markdown", "markdown_inline" },
   sync_install = false,
@@ -122,6 +128,7 @@ require('oil').setup({
   }
 })
 require('fyler').setup()
+require('atone').setup()
 require('blink.cmp').setup({
   keymap = { preset = 'enter' }
 })
@@ -143,6 +150,11 @@ require('kanagawa').setup({
       },
     },
   }
+})
+require('jj').setup({
+  picker = {
+    snacks = {}
+  },
 })
 require('noice').setup({
   messages = {
@@ -168,13 +180,23 @@ require('fzf-lua').setup({
   --   }
   -- },
 })
+require('fzf-lua').register_ui_select()
 require('dap-view').setup({
   winbar = {
     sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl", "console" },
   }
 })
 require('toggleterm').setup()
-require('gitsigns').setup()
+require('gitsigns').setup({
+  -- Ensure the blame feature is configured
+  current_line_blame = false, -- Set to 'false' by default, as you only want it when toggled.
+  current_line_blame_opts = {
+    virt_text = true,
+    virt_text_pos = 'eol', -- Position: 'eol' (end of line), 'overlay', or 'right_align'
+    delay = 100,           -- Delay before the blame appears when idle
+  },
+  -- ... other gitsigns options
+})
 -- auto open dap view on dap attach and close dap view on terminate
 require('dap').listeners.before.attach.dapui_config = function()
   vim.cmd("DapViewOpen")
@@ -207,7 +229,7 @@ vim.api.nvim_create_autocmd('PackChanged', {
 vim.lsp.enable('slangd')
 
 vim.o.background = 'dark'
-vim.o.cmdheight = 0
+-- vim.o.cmdheight = 0
 
 -- keymaps
 vim.keymap.set('n', '<C-h>', require("tmux").move_left, { desc = 'Move focus to the left window' })
@@ -244,6 +266,7 @@ vim.keymap.set('n', 'dt', function()
 end)
 vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm direction=float dir=.<CR>')
 vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>')
+vim.keymap.set('n', '<leader>u', '<cmd>Atone<CR>')
 
 if vim.g.neovide then
   vim.g.neovide_scale_factor = 0.87
@@ -258,7 +281,7 @@ if vim.g.neovide then
   end)
   vim.cmd('colorscheme kanagawa')
 else
-  vim.cmd('colorscheme pywal16')
+  vim.cmd('colorscheme kanagawa')
 end
 --    [[<cmd>lua require("tmux").next_window()<cr>]],
 --    [[<cmd>lua require("tmux").previous_window()<cr>]],
