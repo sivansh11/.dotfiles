@@ -13,6 +13,8 @@ vim.o.clipboard = 'unnamedplus'
 vim.o.confirm = true
 vim.o.wildmenu = true
 vim.o.scrolloff = 10
+vim.o.background = 'dark'
+-- vim.o.cmdheight = 0
 
 -- vim.wo.foldmethod = 'expr'
 -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
@@ -30,55 +32,188 @@ vim.diagnostic.config({
   update_in_insert = false,
 })
 
--- plugins
 vim.pack.add({
-  { src = 'https://github.com/folke/lazydev.nvim' },
-  { src = 'https://github.com/folke/which-key.nvim' },
-  { src = 'https://github.com/rcarriga/nvim-notify' },
-  { src = 'https://github.com/nvim-mini/mini.icons' },
-  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
-  { src = 'https://github.com/rebelot/kanagawa.nvim' },
+  -- colorschemes
   { src = 'https://github.com/ellisonleao/gruvbox.nvim' },
-  { src = 'https://github.com/vague2k/vague.nvim' },
-  { src = 'https://github.com/nvim-tree/nvim-web-devicons' },
-  { src = 'https://github.com/nvim-lualine/lualine.nvim' },
-  { src = 'https://github.com/akinsho/toggleterm.nvim' },
-  { src = 'https://github.com/lewis6991/gitsigns.nvim' },
-  { src = 'https://github.com/NMAC427/guess-indent.nvim' },
-  { src = 'https://github.com/ibhagwan/fzf-lua' },
-  { src = 'https://github.com/stevearc/oil.nvim' },
-  { src = 'https://github.com/A7Lavinraj/fyler.nvim' },
+
+  -- lsp dap (Mason to install lsp's)
   { src = 'https://github.com/mfussenegger/nvim-dap' },
   { src = 'https://github.com/neovim/nvim-lspconfig' },
   { src = 'https://github.com/mason-org/mason.nvim' },
   { src = 'https://github.com/mason-org/mason-lspconfig.nvim' },
-  { src = 'https://github.com/linrongbin16/lsp-progress.nvim' },
   { src = 'https://github.com/jay-babu/mason-nvim-dap.nvim' },
   { src = 'https://github.com/igorlfs/nvim-dap-view', },
-  { src = 'https://github.com/mikesmithgh/kitty-scrollback.nvim' },
-  { src = 'https://github.com/folke/snacks.nvim' },
-  { src = 'https://github.com/sivansh11/jj.nvim' },
-  { src = 'https://github.com/sindrets/diffview.nvim' },
-  { src = 'https://github.com/julienvincent/hunk.nvim' },
+
+  -- treesitter
+  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
+
   { src = 'https://github.com/aserowy/tmux.nvim' },
-  { src = 'https://github.com/nvim-tree/nvim-tree.lua' },
-  { src = 'https://github.com/MunifTanjim/nui.nvim' },
-  { src = 'https://github.com/archibate/lualine-time' },
-  { src = 'https://github.com/vyfor/cord.nvim' },
-  { src = 'https://github.com/folke/noice.nvim' },
-  { src = 'https://github.com/j-hui/fidget.nvim' },
-  { src = 'https://github.com/uZer/pywal16.nvim' },
-  { src = 'https://github.com/XXiaoA/atone.nvim' },
+
+  -- completions
   {
     src = 'https://github.com/saghen/blink.cmp',
-    version = 'v1.6.0'
+    version = 'v1.8.0'
   },
+
+  { src = 'https://github.com/stevearc/oil.nvim' },
+
+  { src = 'https://github.com/XXiaoA/atone.nvim' },
+
+  { src = 'https://github.com/nvim-mini/mini.nvim' },
+
+  { src = 'https://github.com/sindrets/diffview.nvim' },
+
+  { src = 'https://github.com/MunifTanjim/nui.nvim' },
+
+  { src = 'https://github.com/julienvincent/hunk.nvim' },
+
+  { src = 'https://github.com/sivansh11/jj' },
+
+  { src = 'https://github.com/akinsho/toggleterm.nvim' },
+
+  -- not needed
+  { src = 'https://github.com/folke/lazydev.nvim' },
 })
-require('lazydev').setup()
+
+require('gruvbox').setup({
+  transparent_mode = true,
+  overrides = {
+    SignColumn = { link = "Normal" }
+  }
+})
+
+-- require('mini.basics').setup()
+require('mini.files').setup()
+
+local cache = {}
+
+local function get_buf_realpath(buf_id)
+  return vim.loop.fs_realpath(vim.api.nvim_buf_get_name(buf_id)) or ''
+end
+
+local function repo_dir(path)
+  local result = vim.system({ 'jj', '--ignore-working-copy', 'root' }, { cwd = vim.fs.dirname(path) }):wait()
+  if result.code == 0 then
+    return vim.trim(result.stdout)
+  else
+    return nil
+  end
+end
+
+local function invalidate_cache(buf_id)
+  local cache = cache[buf_id]
+  if cache == nil then return false end
+  pcall(function()
+    cache.fs_event:stop()
+    cache.timer:stop()
+  end)
+  cache[buf_id] = nil
+end
+
+local function start_watching(buf_id, path)
+  local repo = repo_dir(path)
+  if repo == nil then return false end
+  local watchfile = vim.fs.joinpath(repo, ".jj/working_copy")
+
+  local buf_fs_event, timer = vim.loop.new_fs_event(), vim.loop.new_timer()
+  local set_ref_text = function()
+    vim.system(
+      { "jj", "--ignore-working-copy", "file", "show", "-r", "@-", "\"" .. path .. "\"" },
+      { cwd = vim.fs.dirname(path), text = true },
+      vim.schedule_wrap(function(res)
+        local MiniDiff = require('mini.diff')
+        MiniDiff.set_ref_text(buf_id, res.stdout)
+      end)
+    )
+  end
+
+  local watch_index = function(_, filename, _)
+    if filename ~= "checkout" then return end
+    timer:stop()
+    timer:start(50, 0, set_ref_text)
+  end
+  buf_fs_event:start(watchfile, { recursive = true }, watch_index)
+
+  invalidate_cache(buf_id)
+  cache[buf_id] = { fs_event = buf_fs_event, timer = timer }
+
+  set_ref_text()
+end
+
+require('mini.diff').setup({
+  view = {
+    style = "sign"
+  },
+  source = {
+    name = "jj",
+    attach = function(buf_id)
+      if cache[buf_id] ~= nil then return false end
+
+      local path = get_buf_realpath(buf_id)
+      if path == '' then return false end
+
+      return start_watching(buf_id, path)
+    end,
+    detach = function(buf_id)
+      invalidate_cache(buf_id)
+    end,
+  }
+})
+require('mini.pick').setup({
+  mappings = {
+    delete_left = nil,
+    scroll_down = '<C-d>',
+    scroll_up = '<C-u>',
+  },
+  window = {
+    config = function()
+      local height = math.floor(0.618 * vim.o.lines)
+      local width = math.floor(0.618 * vim.o.columns)
+      return {
+        anchor = 'NW',
+        height = height,
+        width = width,
+        row = math.floor(0.5 * (vim.o.lines - height)),
+        col = math.floor(0.5 * (vim.o.columns - width)),
+      }
+    end
+  }
+})
+MiniPick.registry.my_buffers = function()
+  local items, cwd = {}, vim.fn.getcwd()
+  local cur_buf_id = vim.api.nvim_get_current_buf()
+  for _, buf_info in ipairs(vim.fn.getbufinfo()) do
+    if buf_info.listed == 1 and buf_info.bufnr ~= cur_buf_id then
+      local name = vim.fs.relpath(cwd, buf_info.name) or buf_info.name
+      table.insert(items, { text = name, bufnr = buf_info.bufnr, _lastused = buf_info.lastused })
+    end
+  end
+
+  table.sort(items, function(a, b) return a._lastused > b._lastused end)
+
+  local show = function(buf_id, items_to_show, query)
+    MiniPick.default_show(buf_id, items_to_show, query, { show_icons = true })
+  end
+  local opts = { source = { name = 'Buffers', items = items, show = show } }
+  return MiniPick.start(opts)
+end
+require('mini.notify').setup()
+require('mini.git').setup()
+require('mini.icons').setup()
+require('mason').setup()
+require('mason-lspconfig').setup()
+require("mason-nvim-dap").setup({
+  handlers = {},
+  ensure_installed = {},
+  automatic_installation = false,
+})
+
 require('nvim-treesitter.configs').setup({
   ensure_installed = { "c", "cpp", "lua", "vimdoc", "markdown", "markdown_inline" },
   sync_install = false,
   auto_install = true,
+  ignore_install = {},
+  modules = {},
   indent = {
     enable = true
   },
@@ -98,26 +233,13 @@ require('nvim-treesitter.configs').setup({
     additional_vim_regex_highlighting = false,
   },
 })
-require('nvim-tree').setup()
-require("tmux").setup()
-require('kitty-scrollback').setup({
-  paste_window = {
-    yank_register_enabled = false
-  }
+
+require('tmux').setup()
+
+require('blink.cmp').setup({
+  keymap = { preset = 'enter' }
 })
-require('mason').setup()
-require("mason-nvim-dap").setup({
-  handlers = {}
-})
-require('mason-lspconfig').setup()
-require('lsp-progress').setup()
-require('lualine').setup({
-  sections = {
-    lualine_z = {
-      'ctime',
-    }
-  }
-})
+
 require('oil').setup({
   -- add q to quite oil
   keymaps = {
@@ -127,161 +249,80 @@ require('oil').setup({
     }
   }
 })
-require('fyler').setup()
+
 require('atone').setup()
-require('blink.cmp').setup({
-  keymap = { preset = 'enter' }
-})
-require('gruvbox').setup({
-  transparent_mode = true,
-  overrides = {
-    SignColumn = { link = "Normal" }
-  }
-})
--- kanagawa fix goofy background
-require('vague').setup({})
-require('kanagawa').setup({
-  colors = {
-    theme = {
-      all = {
-        ui = {
-          bg_gutter = "none",
-        },
-      },
+
+-- annoying adding closing keymaps to diffview
+require('diffview').setup({
+  use_icons = false,
+  keymaps = {
+    view = {
+      { 'n', 'q',     '<cmd>DiffviewClose<CR>' },
+      { 'n', '<Esc>', '<cmd>DiffviewClose<CR>' },
+    },
+    diff1 = {
+      { 'n', 'q',     '<cmd>DiffviewClose<CR>' },
+      { 'n', '<Esc>', '<cmd>DiffviewClose<CR>' },
+    },
+    diff2 = {
+      { 'n', 'q',     '<cmd>DiffviewClose<CR>' },
+      { 'n', '<Esc>', '<cmd>DiffviewClose<CR>' },
+    },
+    diff3 = {
+      { 'n', 'q',     '<cmd>DiffviewClose<CR>' },
+      { 'n', '<Esc>', '<cmd>DiffviewClose<CR>' },
+    },
+    diff4 = {
+      { 'n', 'q',     '<cmd>DiffviewClose<CR>' },
+      { 'n', '<Esc>', '<cmd>DiffviewClose<CR>' },
+    },
+    file_panel = {
+      { 'n', 'q',     '<cmd>DiffviewClose<CR>' },
+      { 'n', '<Esc>', '<cmd>DiffviewClose<CR>' },
+    },
+    file_history_panel = {
+      { 'n', 'q',     '<cmd>DiffviewClose<CR>' },
+      { 'n', '<Esc>', '<cmd>DiffviewClose<CR>' },
+    },
+    option_panel = {
+      { 'n', 'q',     '<cmd>DiffviewClose<CR>' },
+      { 'n', '<Esc>', '<cmd>DiffviewClose<CR>' },
     },
   }
 })
-require('jj').setup({
-  picker = {
-    snacks = {}
-  },
-})
-require('noice').setup({
-  messages = {
-    enabled = false,
-  },
-  popupmenu = {
-    enabled = false,
-  },
-  presets = {
-    command_palette = true,
-  }
-})
-require('fidget').setup({
-  notification = {
-    override_vim_notify = true,
-  },
-})
-require('fzf-lua').setup({
-  fzf_colors = true,
-  -- actions = {
-  --   files = {
-  --     true,
-  --   }
-  -- },
-})
-require('fzf-lua').register_ui_select()
-require('dap-view').setup({
-  winbar = {
-    sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl", "console" },
-  }
-})
+
+require('jj').setup()
+
 require('toggleterm').setup()
-require('gitsigns').setup({
-  -- Ensure the blame feature is configured
-  current_line_blame = false, -- Set to 'false' by default, as you only want it when toggled.
-  current_line_blame_opts = {
-    virt_text = true,
-    virt_text_pos = 'eol', -- Position: 'eol' (end of line), 'overlay', or 'right_align'
-    delay = 100,           -- Delay before the blame appears when idle
-  },
-  -- ... other gitsigns options
-})
--- auto open dap view on dap attach and close dap view on terminate
-require('dap').listeners.before.attach.dapui_config = function()
-  vim.cmd("DapViewOpen")
-end
-require('dap').listeners.before.launch.dapui_config = function()
-  vim.cmd("DapViewOpen")
-end
-require('dap').listeners.before.event_terminated.dapui_config = function()
-  vim.cmd("DapViewClose")
-end
-require('dap').listeners.before.event_exited.dapui_config = function()
-  vim.cmd("DapViewClose")
-end
 
-vim.fn.sign_define('DapBreakpoint', {
-  text = '',
-  texthl = 'DapBreakpoint',
-  linehl = '',
-  numhl = ''
+require('lazydev').setup()
+
+vim.cmd('colorscheme gruvbox')
+
+vim.keymap.set('n', '<Esc>', '<cmd>noh<CR>')
+
+vim.keymap.set('n', '<c-h>', require('tmux').move_left, {
+  desc = "move focus left"
+})
+vim.keymap.set('n', '<c-l>', require('tmux').move_right, {
+  desc = "move focus right"
+})
+vim.keymap.set('n', '<c-j>', require('tmux').move_bottom, {
+  desc = "move focus bottom"
+})
+vim.keymap.set('n', '<c-k>', require('tmux').move_top, {
+  desc = "move focus top"
 })
 
-vim.api.nvim_create_autocmd('PackChanged', {
-  callback = function(opts)
-    if opts.data.spec.name == 'cord.nvim' and opts.data.kind == 'update' then
-      vim.cmd 'Cord update'
-    end
-  end
-})
-
-vim.lsp.enable('slangd')
-
-vim.o.background = 'dark'
--- vim.o.cmdheight = 0
-
--- keymaps
-vim.keymap.set('n', '<C-h>', require("tmux").move_left, { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', require("tmux").move_right, { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', require("tmux").move_bottom, { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', require("tmux").move_top, { desc = 'Move focus to the upper window' })
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', '<leader>cf', vim.lsp.buf.format)
-vim.keymap.set('n', '<leader>ff', require('fzf-lua').files)
-vim.keymap.set('n', '<leader>sg', require('fzf-lua').live_grep)
-vim.keymap.set('n', '<leader>ss', require('fzf-lua').lsp_live_workspace_symbols)
-vim.keymap.set('n', '<leader>sd', require('fzf-lua').diagnostics_workspace)
-vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename)
--- vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
-vim.keymap.set('n', '<leader>ca', require('fzf-lua').lsp_code_actions)
-vim.keymap.set('n', 'gr', require('fzf-lua').lsp_references)
-vim.keymap.set('n', 'gI', require('fzf-lua').lsp_implementations)
-vim.keymap.set('n', 'gd', require('fzf-lua').lsp_definitions)
-vim.keymap.set('n', 'gD', vim.lsp.buf.declaration)
-vim.keymap.set('n', 'gK', vim.lsp.buf.signature_help)
-vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help)
-vim.keymap.set('n', '<leader><leader>', require('fzf-lua').buffers)
+vim.keymap.set('n', '<leader>ff', MiniPick.builtin.files)
+vim.keymap.set('n', '<leader><leader>', MiniPick.registry.my_buffers)
+vim.keymap.set('n', '<leader>sg', MiniPick.builtin.grep_live)
+-- TODO: see how to reintroduce lsp helpers using mini pick
+vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action)
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
 vim.keymap.set('n', '-', '<cmd>Oil<CR>')
-vim.keymap.set('n', '<F5>', require('dap').continue)
-vim.keymap.set('n', '<F10>', require('dap').step_over)
-vim.keymap.set('n', '<F11>', require('dap').step_into)
-vim.keymap.set('n', '<F23>', require('dap').step_out)
-vim.keymap.set('n', '<F9>', require('dap').toggle_breakpoint)
-vim.keymap.set('n', '<Right>', require('dap').down)
-vim.keymap.set('n', '<Left>', require('dap').up)
-vim.keymap.set('n', 'dt', function()
-  require('dap').terminate()
-  vim.cmd('DapViewClose')
-end)
-vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm direction=float dir=.<CR>')
-vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>')
+-- TODO: dap keymaps
 vim.keymap.set('n', '<leader>u', '<cmd>Atone<CR>')
 
-if vim.g.neovide then
-  vim.g.neovide_scale_factor = 0.87
-  vim.keymap.set({ "n", "v" }, "<C-=>", function()
-    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1
-  end)
-  vim.keymap.set({ "n", "v" }, "<C-->", function()
-    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1
-  end)
-  vim.keymap.set({ "n", "v" }, "<C-0>", function()
-    vim.g.neovide_scale_factor = 1.0
-  end)
-  vim.cmd('colorscheme kanagawa')
-else
-  vim.cmd('colorscheme kanagawa')
-end
---    [[<cmd>lua require("tmux").next_window()<cr>]],
---    [[<cmd>lua require("tmux").previous_window()<cr>]],
+vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm direction=float dir=.<CR>')
