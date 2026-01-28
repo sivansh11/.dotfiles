@@ -3,7 +3,7 @@ window#waybar {{
   color: {foreground};
   font-family: "monospace", "Font Awesome 6 Free";
   font-size: 12px;
-  border-radius: 10px;
+  border-radius: 0px;
   border: 2px solid {color3};
 }}
 
@@ -16,7 +16,7 @@ window#waybar {{
     background-color: transparent;
     color: {color3};
     border: none;
-    border-radius: 5px;
+    border-radius: 0px;
 }}
 
 #workspaces button.active {{

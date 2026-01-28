@@ -5,8 +5,8 @@ if [ "$#" -lt 1 ]; then
   exit 1
 fi
 
-wal -n -i "$1" > /dev/null 2>&1
-swww img --transition-type=any $(cat ~/.cache/wal/wal)
+wal --backend colorthief -n -i "$1" > /dev/null 2>&1
+awww img --transition-type=any $(cat ~/.cache/wal/wal)
 killall waybar
 waybar -s ~/.cache/wal/style.css > /dev/null 2>&1 & disown
 dunstctl reload

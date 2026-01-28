@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euo pipefail
+
+if [ "${1:-}" = "" ]; then
+  echo "No path provided. Usage: $0 <path>" >&2
+  exit 1
+fi
+path="$1"
+
+/home/sivansh/scripts/update_noctalia_wallpaper_path $path
+sleep 0.1
+qs -c noctalia-shell ipc call plugin:wallcards toggle

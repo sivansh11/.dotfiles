@@ -1,10 +1,10 @@
 [
 	{
-		"height": 35,
-		"width": 1536,
-		"spacing": 5,
-		"margin-top": 5,
-		"margin-bottom": 5,
+		// "height": 35,
+		// "width": 1536,
+		"spacing": 0,
+		"margin-top": 0,
+		"margin-bottom": 0,
 		"modules-left": [
 			"pulseaudio",
 			"custom/media"

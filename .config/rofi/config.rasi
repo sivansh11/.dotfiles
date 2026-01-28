@@ -169,5 +169,5 @@ terminal: "kitty";
 }
 window {
   transparency: "real";
-  border-radius: 16px;
+  // border-radius: 16px;
 }

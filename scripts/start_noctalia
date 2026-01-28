@@ -1,0 +1,5 @@
+#!/bin/bash
+QT_QPA_PLATFORMTHEME=gtk3 qs -c noctalia-shell &
+sleep 5
+# notify-send "switching to performance"
+# qs -c noctalia-shell ipc call powerProfile toggleNoctaliaPerformance

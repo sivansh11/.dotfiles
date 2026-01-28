@@ -21,7 +21,8 @@ source = ~/.cache/wal/colors-hyprland.conf
 ################
 
 # See https://wiki.hypr.land/Configuring/Monitors/
-monitor=,preferred,auto,1
+monitor=eDP-1,1920x1200@60.01,1920x0,1.00
+monitor=HDMI-A-1,1920x1080@180.00,0x32,1.00
 # monitor = HDMI-A-1, preferred, 0x0, 1
 # monitor = eDP-1, preferred, 1920x0, 1
 
@@ -67,9 +68,9 @@ workspace=10, monitor:HDMI-A-1
 
 # Set programs that you use
 $terminal = kitty
-$browser = firefox
+$browser = librewolf
 $fileManager = dolphin
-$menu = rofi -show drun
+$menu = qs -c noctalia-shell ipc call launcher toggle
 
 
 #################
@@ -82,8 +83,9 @@ $menu = rofi -show drun
 # exec-once = $terminal
 # exec-once = nm-applet &
 # exec-once = waybar & hyprpaper & firefox
-exec-once = dunst -conf ~/.cache/wal/dunstrc
-exec-once = waybar -s ~/.cache/wal/style.css
+# exec-once = dunst -conf ~/.cache/wal/dunstrc
+# exec-once = waybar -s ~/.cache/wal/style.css
+exec-once = QT_QPA_PLATFORMTHEME=gtk3 qs -c noctalia-shell
 exec-once = ~/scripts/low_battery
 
 
@@ -122,8 +124,8 @@ env = HYPRCURSOR_SIZE,24
 
 # https://wiki.hypr.land/Configuring/Variables/#general
 general {
-    gaps_in = 0
-    gaps_out = 0
+    gaps_in = 5
+    gaps_out = 10
 
     border_size = 2
 
@@ -143,8 +145,8 @@ general {
 
 # https://wiki.hypr.land/Configuring/Variables/#decoration
 decoration {
-    rounding = 0
-    rounding_power = 0
+    rounding = 20
+    rounding_power = 2
 
     # Change transparency of focused and unfocused windows
     active_opacity = 0.90
@@ -301,8 +303,8 @@ bind = $mainMod, V, togglefloating,
 bind = $mainMod, O, togglesplit,
 bind = $mainMod, W, killactive,
 bind = $mainMod, E, exec, $fileManager
-bind = $mainMod, P, exec, ~/scripts/rofi_wallpaper_selector ~/Pictures/wallpapers/
-bind = $mainMod SHIFT, P, exec, ~/scripts/rofi_wallpaper_selector ~/.hidden
+bind = $mainMod, P, exec, ~/scripts/wallpaper_selector ~/Pictures/wallpapers/
+bind = $mainMod SHIFT, P, exec, ~/scripts/wallpaper_selector ~/.hidden
 bind = $mainMod SHIFT, ESCAPE, exec, killall -SIGUSR1 waybar
 bind = $mainMod, G, exec, cat ~/personal/my_git_key_lmao.txt | wl-copy
 
