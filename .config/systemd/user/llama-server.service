@@ -1,0 +1,17 @@
+[Unit]
+Description=llama-server
+
+[Service]
+Type=simple
+ExecStart=/home/sivansh/dev/llama.cpp/build/bin/llama-server \
+  -t 8 \
+  -tb 8 \
+  -np 2 \
+  --embedding \
+  --no-mmproj \
+  --sleep-idle-seconds 180
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

@@ -18,7 +18,7 @@
       "version": "'v1.8.0'"
     },
     "codecompanion.nvim": {
-      "rev": "61faceb661e406b0abd6554854ce9be46a6c7322",
+      "rev": "b27a1a734fdaf73e40328091cb5929d65aaa09e9",
       "src": "https://github.com/olimorris/codecompanion.nvim.git"
     },
     "codediff.nvim": {
@@ -30,7 +30,7 @@
       "src": "https://github.com/stevearc/conform.nvim.git"
     },
     "cord.nvim": {
-      "rev": "8f081613c1314a0d6f38839c2788216621efb4d9",
+      "rev": "b343e3348a86b78b63e52b64659a62fc2900c6fd",
       "src": "https://github.com/vyfor/cord.nvim.git"
     },
     "diffview.nvim": {
@@ -46,11 +46,11 @@
       "src": "https://github.com/Sang-it/fluoride.git"
     },
     "fyler.nvim": {
-      "rev": "322c79d446884e9939a958294e6108ae8cfbdb12",
+      "rev": "33b2ef22acf7eb683cfc652bf3d1049546f28661",
       "src": "https://github.com/A7Lavinraj/fyler.nvim"
     },
     "fzf-lua": {
-      "rev": "28440c741e927592877514fba3db21eb188caec8",
+      "rev": "8671012a7b2a1648595952c655039d51fb301c14",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -70,7 +70,7 @@
       "src": "https://github.com/julienvincent/hunk.nvim"
     },
     "jj": {
-      "rev": "5d96a66997f360df6677ef6ae695105729406a02",
+      "rev": "352dada2dd3a7414e1053fe70d7662599eb39824",
       "src": "https://github.com/sivansh11/jj"
     },
     "kanagawa.nvim": {
@@ -118,7 +118,7 @@
       "src": "https://github.com/nvim-mini/mini.icons"
     },
     "mini.nvim": {
-      "rev": "bcb4b2688b38f5c48ada025abe130d41840e11d5",
+      "rev": "629bf6792187e11b4829411c1648f86f28df3963",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "noice.nvim": {
@@ -134,11 +134,11 @@
       "src": "https://github.com/mfussenegger/nvim-dap"
     },
     "nvim-dap-view": {
-      "rev": "eda349094a87c6ff5a9c75bbbc88bce45836ae08",
+      "rev": "210b2c0e4acc08aad23fbd5a7989dd0169f716d0",
       "src": "https://github.com/igorlfs/nvim-dap-view"
     },
     "nvim-lspconfig": {
-      "rev": "1c0d8f70dbc8827263eedc3cf7021ceba0f68689",
+      "rev": "43ed3797b266e1ee8d222e491379ad471c9d3146",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-notify": {
@@ -146,11 +146,11 @@
       "src": "https://github.com/rcarriga/nvim-notify"
     },
     "nvim-tree.lua": {
-      "rev": "4213bd6eabac38b16dd6615002b6243b23cf3bf6",
+      "rev": "b2aadda94b107480c48e548d6db51c6840b7b33c",
       "src": "https://github.com/nvim-tree/nvim-tree.lua"
     },
     "nvim-treesitter": {
-      "rev": "7b6cc8949f9999c5ed91436cbe24aa5f99c42025",
+      "rev": "3d3321b560a63ff92a8692401f303a5123336b86",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-web-devicons": {
@@ -178,7 +178,7 @@
       "src": "https://github.com/nvim-lua/plenary.nvim.git"
     },
     "pywal16.nvim": {
-      "rev": "ae9256167b544785e2a21b838c7e1cfba443d154",
+      "rev": "3fc4b37b02fa01a042c873bf6f5e9c06343692d1",
       "src": "https://github.com/uZer/pywal16.nvim"
     },
     "screenkey.nvim": {
